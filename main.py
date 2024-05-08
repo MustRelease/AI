@@ -3,7 +3,8 @@ from typing import List
 from typing import Union
 import uvicorn
 from pydantic import BaseModel
-
+from generate import Generater
+from retriever import Retriever
 
 app = FastAPI()
 
@@ -22,16 +23,22 @@ class Memory(BaseModel):
 	importance : float
 
 @app.post('/memory/init')
-def recommand(data : Init):
+def init(data : Init):
     pass
 
 @app.post('/memory/save')
-def recommand(data : Memory):
+def save(data : Memory):
     pass
 
 @app.post('/response/generate')
-def recommand(data : Memory):
-    pass
+def response(data : Data):
+    message = ""
+    generater = Generater()
+    retriever = Retriever()
+    message += retriever.retrieve_memory_system()
+    message += "<현재 상황>\n"
+    message += data.content
+    return generater.generate(message)
 
 
 if __name__ == "__main__":
