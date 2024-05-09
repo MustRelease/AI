@@ -1,19 +1,21 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from typing import List
 from typing import Union
 import uvicorn
 from pydantic import BaseModel
 from generate import Generater
 from retriever import Retriever
+from controller import Controller
 
 app = FastAPI()
+controller = Controller()
 
 class Data(BaseModel):
     content : str
 
 class Init(BaseModel):
     userId : str
-    data : Union[List[Data], None] = None
+    data : List[Data]
     character : str
 
 class Memory(BaseModel):
@@ -24,11 +26,19 @@ class Memory(BaseModel):
 
 @app.post('/memory/init')
 def init(data : Init):
-    pass
+    code = controller.init_db(data.userId)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="exist userId")
+    code = controller.init_save(data)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="memory save Error")
+
 
 @app.post('/memory/save')
 def save(data : Memory):
-    pass
+    code = controller.save(data)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="memory save Error")
 
 @app.post('/response/generate')
 def response(data : Data):
