@@ -59,7 +59,7 @@ def response(data : Memory):
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
     # 생성한 기억 저장
-    code = controller.save(data.userId, data.playTime, '"' + r + '"라고 말했다.', 1.0)
+    code = controller.save(data.userId, data.playTime, '연아는 "' + r + '"라고 말했다.', 1.0)
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
     # 반환값 생성

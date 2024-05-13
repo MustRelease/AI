@@ -5,7 +5,7 @@ controller = Controller()
 
 class Retriever:
 	def __init__(self):
-		self.r_message = "<A의 기억>\n"
+		self.r_message = "<연아의 기억>\n"
 		self.r_message += "time text priority\n"
 
 	def retrieve_memory_system(self, data):
