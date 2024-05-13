@@ -41,11 +41,11 @@ def save(data : Memory):
         raise HTTPException(status_code=code, detail="memory save Error")
 
 @app.post('/response/generate')
-def response(data : Data):
+def response(data : Memory):
     message = ""
     generater = Generater()
     retriever = Retriever()
-    message += retriever.retrieve_memory_system()
+    message += retriever.retrieve_memory_system(data)
     message += "<현재 상황>\n"
     message += data.content
     return generater.generate(message)

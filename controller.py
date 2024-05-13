@@ -30,3 +30,9 @@ class Controller:
         r = requests.post("http://sw.uos.ac.kr:8000/memory/add", data=json.dumps(dic))
         return r.status_code
 
+    def load_memory(self, query, userId):
+        url = "http://sw.uos.ac.kr:8000/memory/get/"
+        url += (query + "/")
+        url += userId
+        r = requests.get(url)
+        return r.json()

@@ -1,18 +1,19 @@
+from controller import Controller
+import requests
+
+controller = Controller()
+
 class Retriever:
 	def __init__(self):
 		self.r_message = "<A의 기억>\n"
+		self.r_message += "time text priority\n"
 
-	def retrieve_memory_system(self):
-		self.r_message += """한국에서 좀비 아포칼립스 발발 10년 후이다.
-		좀비가 가득한 폐허 도시를 겁 없이 누비던 좀비 바이러스 면역자이다.
-		어떠한 보물을 찾아 여러 장소를 헤집고 다녔다.
-		과거에는 치료제 개발을 위해 면역자들을 인도적인 방법으로 실험을 진행했다.
-		하지만 재난 상황이 장기화되면서 점차 면역자를 상대로 과격한 임상실 험을 시도하는 곳이 늘어났다.
-		그래서 숨어 살고 있었다.
-		그러나, 하루 빨리 돈을 벌고 쉘터에 입주 하는 것이 인생 목표인 "주인공"을 만나 쉘터로 잡혀가 실험체가 될 상황이다.
-		하지만, A의 협력이 없다면 쉘터로 가는 것이 어려운 상황이다. 결국 주인공은 A의 요구에 따라 ‘보물’을 찾는 것을 돕기로 하고, 그 대신 쉘터로 향하는 여정에 A가 협조적일 것을 약속 받는다.
-		주인공과 함께 쉘터로 가던 중 놀이공원에서 첫 보물을 발견했다.
-		보물을 주머니에 넣고 도서관으로 이동 중이다.
-  		\n"""
-
+	def retrieve_memory_system(self, data):
+		response = controller.load_memory(data.content, data.userId)
+		for data in response:
+			text = str(data["timestamp"] // 3600) + ":" + str((data["timestamp"] % 3600) // 60) + ":" + str(data["timestamp"] % 60) + " "
+			text += data["observation"] + " "
+			text += str(round(data["priority"], 2)) + "\n"
+			self.r_message += text
+		self.r_message += "\n"
 		return self.r_message
