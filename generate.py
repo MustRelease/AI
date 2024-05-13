@@ -15,7 +15,7 @@ class EventHandler(AssistantEventHandler):
 
 class Generater:
 	def __init__(self):
-		load_dotenv()
+		load_dotenv(override=True)
 		self.assistant_id = "asst_pkhPiEMEmYXXb65mRqIkzP6t"
 		self.client = OpenAI(
       		api_key=os.environ.get("OPENAI_API_KEY")
@@ -29,12 +29,15 @@ class Generater:
   			role="user",
   			content=query
 		)
+		response = ""
 		with self.client.beta.threads.runs.stream(
-		  	thread_id=thread.id,
-		  	assistant_id=self.assistant_id,
-			instructions="A의 기억과 현재 상황을 참고하여 주인공과 한 문장으로 대화해줘",
-		  	event_handler=EventHandler(),
+			thread_id=thread.id,
+			assistant_id=self.assistant_id,
+			instructions="A의 기억과 현재 상황을 참고하여 주인공과 한 문장으로 대화해줘"
 		) as stream:
-			stream.until_done()
+			for text in stream.text_deltas:
+				print(text, end="")
+				response += text
+		return response
 
 

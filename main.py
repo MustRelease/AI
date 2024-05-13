@@ -24,6 +24,10 @@ class Memory(BaseModel):
 	playTime : str
 	importance : float
 
+class GenText(BaseModel):
+    content : str
+    regenerate : bool
+
 @app.post('/memory/init')
 def init(data : Init):
     code = controller.init_db(data.userId)
@@ -36,20 +40,35 @@ def init(data : Init):
 
 @app.post('/memory/save')
 def save(data : Memory):
-    code = controller.save(data)
+    code = controller.save(data.userId, data.playTime, data.content, data.importance)
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
 
 @app.post('/response/generate')
 def response(data : Memory):
+    # 기억 생성
     message = ""
     generater = Generater()
     retriever = Retriever()
     message += retriever.retrieve_memory_system(data)
     message += "<현재 상황>\n"
     message += data.content
-    return generater.generate(message)
+    r = generater.generate(message)
+    # 넘어온 기억 저장
+    code = controller.save(data.userId, data.playTime, data.content, data.importance)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="memory save Error")
+    # 생성한 기억 저장
+    code = controller.save(data.userId, data.playTime, '"' + r + '"라고 말했다.', 1.0)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="memory save Error")
+    # 반환값 생성
+    dic = {
+        "content" : r,
+        "regenerate" : True
+    }
+    return dic
 
 
 if __name__ == "__main__":
-    uvicorn.run("main:app" , host="127.0.0.1", port=8000)
+    uvicorn.run("main:app" , host="0.0.0.0", port=8080)

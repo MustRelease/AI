@@ -18,14 +18,14 @@ class Controller:
                 return r.status_code
         return r.status_code
 
-    def save(self, data):
-        times = data.playTime.split(sep=":")
+    def save(self, userId, playTime, content, importance):
+        times = playTime.split(sep=":")
         time = 3600 * int(times[0]) + 60 * int(times[1]) + int(times[2])
         dic = {
-				"userId" : data.userId,
+				"userId" : userId,
 				"timestamp" : time,
-				"observation" : data.content,
-				"importance" : data.importance
+				"observation" : content,
+				"importance" : importance
 			}
         r = requests.post("http://sw.uos.ac.kr:8000/memory/add", data=json.dumps(dic))
         return r.status_code
