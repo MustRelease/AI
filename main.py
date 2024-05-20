@@ -24,9 +24,8 @@ class Memory(BaseModel):
 	playTime : str
 	importance : float
 
-class GenText(BaseModel):
-    content : str
-    regenerate : bool
+class Id(BaseModel):
+    userId : str
 
 @app.post('/memory/init')
 def init(data : Init):
@@ -40,7 +39,7 @@ def init(data : Init):
 
 @app.post('/memory/save')
 def save(data : List[Memory]):
-    code = controller.save_all(data)
+    code = controller.save_all(data, True)
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
 
@@ -51,9 +50,11 @@ def response(data : Memory):
     generater = Generater()
     retriever = Retriever()
     message += retriever.retrieve_memory_system(data)
-    message += "<현재 상황>\n"
+    message += "<이전 대화내용>\n"
+    message += retriever.retrieve_buffer(data.userId)
+    message += "\n<현재 상황>\n"
     message += data.content
-    message += "\nInstruct : 그래서 너는 기억과 현재 상황을 참고하여 지성에게 뭐라고 해야할까?"
+    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까?"
     r = generater.generate(message)
     # 넘어온 기억 저장
     code = controller.save(data.userId, data.playTime, data.content, data.importance)
@@ -69,6 +70,19 @@ def response(data : Memory):
         "regenerate" : True
     }
     return dic
+
+@app.post('/response/init')
+def buffer_init(data : List[Memory]):
+    code = controller.save_all(data, True)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="memory save Error")
+
+
+@app.post('/memory/reflect')
+def reflect(data : Id):
+    code = controller.relocate_buffer(data.userId)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="move buffer Error")
 
 if __name__ == "__main__":
     uvicorn.run("main:app" , host="0.0.0.0", port=8080)

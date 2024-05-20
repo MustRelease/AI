@@ -17,3 +17,10 @@ class Retriever:
 			self.r_message += text
 		self.r_message += "\n"
 		return self.r_message
+
+	def retrieve_buffer(self, userId):
+		text = ""
+		response = controller.load_buffer(userId)
+		for data in response:
+			text = text + data["observation"] + "\n"
+		return text
