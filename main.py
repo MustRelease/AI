@@ -39,8 +39,8 @@ def init(data : Init):
 
 
 @app.post('/memory/save')
-def save(data : Memory):
-    code = controller.save(data.userId, data.playTime, data.content, data.importance)
+def save(data : List[Memory]):
+    code = controller.save_all(data)
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
 
@@ -53,13 +53,14 @@ def response(data : Memory):
     message += retriever.retrieve_memory_system(data)
     message += "<현재 상황>\n"
     message += data.content
+    message += "\nInstruct : 그래서 너는 기억과 현재 상황을 참고하여 지성에게 뭐라고 해야할까?"
     r = generater.generate(message)
     # 넘어온 기억 저장
     code = controller.save(data.userId, data.playTime, data.content, data.importance)
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
     # 생성한 기억 저장
-    code = controller.save(data.userId, data.playTime, '연아는 "' + r + '"라고 말했다.', 1.0)
+    code = controller.save(data.userId, data.playTime, '나는 ' + r + '라고 말했다.', 1.0)
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
     # 반환값 생성
@@ -68,7 +69,6 @@ def response(data : Memory):
         "regenerate" : True
     }
     return dic
-
 
 if __name__ == "__main__":
     uvicorn.run("main:app" , host="0.0.0.0", port=8080)

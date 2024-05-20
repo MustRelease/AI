@@ -32,8 +32,7 @@ class Generater:
 		response = ""
 		with self.client.beta.threads.runs.stream(
 			thread_id=thread.id,
-			assistant_id=self.assistant_id,
-			instructions="연아의 기억과 현재 상황을 참고하여 지성과 한 문장으로 대화해줘"
+			assistant_id=self.assistant_id
 		) as stream:
 			for text in stream.text_deltas:
 				print(text, end="")
