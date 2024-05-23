@@ -6,6 +6,7 @@ from pydantic import BaseModel
 from generate import Generater
 from retriever import Retriever
 from controller import Controller
+from reflect import Reflecter
 
 app = FastAPI()
 controller = Controller()
@@ -80,9 +81,14 @@ def buffer_init(data : List[Memory]):
 
 @app.post('/memory/reflect')
 def reflect(data : Id):
+    reflecter = Reflecter()
+    code = reflecter.reflect(data.userId)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="Reflect Format Error : Try again")
     code = controller.relocate_buffer(data.userId)
     if code != 200:
         raise HTTPException(status_code=code, detail="move buffer Error")
+
 
 if __name__ == "__main__":
     uvicorn.run("main:app" , host="0.0.0.0", port=8080)

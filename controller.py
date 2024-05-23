@@ -57,7 +57,7 @@ class Controller:
         encode_query = urllib.parse.quote(query)
         url = "http://sw.uos.ac.kr:8000/memory/get/"
         url += (encode_query + "/")
-        url += userId
+        url += (userId + "/10")
         r = requests.get(url)
         return r.json()
 
