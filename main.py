@@ -7,6 +7,7 @@ from generate import Generater
 from retriever import Retriever
 from controller import Controller
 from reflect import Reflecter
+from convert import Converter
 
 app = FastAPI()
 controller = Controller()
@@ -24,6 +25,8 @@ class Memory(BaseModel):
 	content : str
 	playTime : str
 	importance : float
+	isDescription : bool | None = False
+
 
 class Id(BaseModel):
     userId : str
@@ -40,6 +43,10 @@ def init(data : Init):
 
 @app.post('/memory/save')
 def save(data : List[Memory]):
+    converter = Converter()
+    for d in data:
+        if d.isDescription:
+            d.content = converter.convert_description(d.content)
     code = controller.save_all(data, True)
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
@@ -82,7 +89,7 @@ def buffer_init(data : List[Memory]):
 @app.post('/memory/reflect')
 def reflect(data : Id):
     reflecter = Reflecter()
-    code = reflecter.reflect(data.userId)
+    code = reflecter.reflect_anynum(data.userId)
     if code != 200:
         raise HTTPException(status_code=code, detail="Reflect Format Error : Try again")
     code = controller.relocate_buffer(data.userId)
