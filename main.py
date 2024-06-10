@@ -89,6 +89,7 @@ def buffer_init(data : List[Memory]):
 @app.post('/memory/reflect')
 def reflect(data : Id):
     reflecter = Reflecter()
+    reflecter.get_importance(data.userId)
     code = reflecter.reflect_anynum(data.userId)
     if code != 200:
         raise HTTPException(status_code=code, detail="Reflect Format Error : Try again")

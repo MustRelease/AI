@@ -22,7 +22,7 @@ class Controller:
             return r.status_code
         return r.status_code
 
-    def save(self, userId, playTime, content, importance):
+    def save(self, userId, playTime, content, importance, reason_list=None):
         save_data = []
         times = playTime.split(sep=":")
         time = 3600 * int(times[0]) + 60 * int(times[1]) + int(times[2])
