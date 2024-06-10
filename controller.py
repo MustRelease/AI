@@ -66,8 +66,8 @@ class Controller:
         url = base_url + "memory/get/id/"
         url = url + userId + "/"
         url += str(id)
-        r = requests.delete(url)
-        return r.status_code
+        r = requests.get(url)
+        return r.json()
 
     def load_buffer(self, userId):
         url = base_url + "memory/get/buffer/"
