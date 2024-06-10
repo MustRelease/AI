@@ -74,14 +74,6 @@ def response(data : Memory):
     message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까?"
     message += ("\n" if data.count<3 else " 이제 대화를 마무리하는 말을 한다.\n")
     r = generater.generate(message)
-    # 넘어온 기억 저장
-    code = controller.save(data.userId, data.playTime, data.content, data.importance)
-    if code != 200:
-        raise HTTPException(status_code=code, detail="memory save Error")
-    # 생성한 기억 저장
-    code = controller.save(data.userId, data.playTime, '나는 ' + r + '라고 말했다.', 1.0)
-    if code != 200:
-        raise HTTPException(status_code=code, detail="memory save Error")
     # 반환값 생성
     dic = {
         "content" : r,
