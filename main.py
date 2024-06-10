@@ -26,7 +26,7 @@ class Memory(BaseModel):
 	playTime : str
 	importance : float
 	isDescription : bool | None = False
-
+	count : int | None = 1
 
 class Id(BaseModel):
     userId : str
@@ -71,7 +71,8 @@ def response(data : Memory):
     message += retriever.retrieve_buffer(data.userId)
     message += "\n<현재 상황>\n"
     message += data.content
-    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까?\n"
+    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까?"
+    message += ("\n" if data.count<3 else " 이제 대화를 마무리하는 말을 한다.\n")
     r = generater.generate(message)
     # 넘어온 기억 저장
     code = controller.save(data.userId, data.playTime, data.content, data.importance)
@@ -84,7 +85,7 @@ def response(data : Memory):
     # 반환값 생성
     dic = {
         "content" : r,
-        "regenerate" : True
+        "regenerate" : True if data.count<3 else False
     }
     return dic
 
