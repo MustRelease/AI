@@ -70,9 +70,8 @@ def response(data : Memory):
     message += retriever.retrieve_memory_system(data)
     message += "<이전 대화내용>\n"
     message += retriever.retrieve_buffer(data.userId)
-    message += "\n<현재 상황>\n"
     message += data.content
-    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다."
+    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 이어서 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다."
     message += ("\n" if data.count<2 else " 가능하면 질문보다는 나의 이야기를 많이 한다.")
     message += ("\n" if data.count<4 else " 이제 대화를 마무리하는 말을 한다.\n")
     r = generater.generate(message)
