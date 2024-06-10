@@ -11,6 +11,7 @@ from convert import Converter
 
 app = FastAPI()
 controller = Controller()
+generater = Generater()
 
 class Data(BaseModel):
     content : str
@@ -39,6 +40,7 @@ def init(data : Init):
     code = controller.init_save(data)
     if code != 200:
         raise HTTPException(status_code=code, detail="memory save Error")
+    generater.set_instructions(data.character)
 
 
 @app.post('/memory/save')
@@ -64,7 +66,6 @@ def save(data : List[Memory]):
 def response(data : Memory):
     # 기억 생성
     message = ""
-    generater = Generater()
     retriever = Retriever()
     message += retriever.retrieve_memory_system(data)
     message += "<이전 대화내용>\n"
@@ -72,13 +73,13 @@ def response(data : Memory):
     message += "\n<현재 상황>\n"
     message += data.content
     message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다."
-    message += ("\n" if data.count<3 else " 이제 대화를 마무리하는 말을 한다.\n")
+    message += ("\n" if data.count<5 else " 이제 대화를 마무리하는 말을 한다.\n")
     r = generater.generate(message)
     r = r.replace("\"", "")
     # 반환값 생성
     dic = {
         "content" : r,
-        "regenerate" : True if data.count<3 else False
+        "regenerate" : True if data.count<5 else False
     }
     return dic
 

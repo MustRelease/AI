@@ -19,6 +19,13 @@ class Generater:
       		api_key=load_dotenv(".env")
         )
 
+	def set_instructions(self, instruction):
+		my_updated_assistant = client.beta.assistants.update(
+  			self.assistant_id,
+  			instructions=instruction
+		)
+		print(my_updated_assistant)
+
 	def generate(self, query):
 		print(query)
 		thread = self.client.beta.threads.create()
