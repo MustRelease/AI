@@ -14,7 +14,7 @@ class EventHandler(AssistantEventHandler):
 
 class Generater:
 	def __init__(self):
-		self.assistant_id = "asst_pkhPiEMEmYXXb65mRqIkzP6t"
+		self.assistant_id = "asst_VDoA2Hw0qHcJwATd5HfqZ7Hm"
 		self.client = OpenAI(
       		api_key=load_dotenv(".env")
         )

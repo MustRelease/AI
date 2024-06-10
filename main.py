@@ -42,6 +42,15 @@ def init(data : Init):
 
 
 @app.post('/memory/save')
+def save(data : Memory):
+    converter = Converter()
+    if data.isDescription:
+        data.content = converter.convert_description(data.content)
+    code = controller.save(data.userId, data.playTime, data.content, data.importance)
+    if code != 200:
+        raise HTTPException(status_code=code, detail="memory save Error")
+
+@app.post('/memories/save')
 def save(data : List[Memory]):
     converter = Converter()
     for d in data:
@@ -62,7 +71,7 @@ def response(data : Memory):
     message += retriever.retrieve_buffer(data.userId)
     message += "\n<현재 상황>\n"
     message += data.content
-    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까?"
+    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까?\n"
     r = generater.generate(message)
     # 넘어온 기억 저장
     code = controller.save(data.userId, data.playTime, data.content, data.importance)
