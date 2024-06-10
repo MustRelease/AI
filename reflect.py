@@ -143,7 +143,7 @@ What high-level insights can you infer from the above statements about 지성 in
 			for s in insights:
 				l = re.findall(r'\[(.*?)\]', s)
 				l = [int(num) for num in l[0].split(', ')]
-				controller.save(userId, "00:00:00", s.split(".")[1].split("(")[0], 1.0, reason_list=l)
+				controller.save(userId, "00:00:00", s.split(".")[1], 1.0, reason_list=l)
 		except:
 			print("Reflect Format Error : Try again")
 			return 500

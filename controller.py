@@ -15,7 +15,7 @@ class Controller:
 				"userId" : initData.userId,
 				"timestamp" : 0,
 				"observation" : d.content,
-				"importance" : 1.0,
+				"importance" : 0.5,
                 "isEventScene" : False,
                 "reasonIds" : "null"
 			}
@@ -33,7 +33,7 @@ class Controller:
 				"observation" : content,
 				"importance" : importance,
                 "isEventScene" : True,
-                "reasonIds" : "null" if reason_list==None else reason_list
+                "reasonIds" : "null" if reason_list==None else str(reason_list)
 			}
         save_data.append(dic)
         r = requests.post(base_url + "memory/add", data=json.dumps(save_data))
@@ -58,7 +58,7 @@ class Controller:
         encode_query = urllib.parse.quote(query)
         url = base_url + "memory/get/"
         url += (encode_query + "/")
-        url += (userId + "/10")
+        url += (userId + "/20")
         r = requests.get(url)
         return r.json()
 
