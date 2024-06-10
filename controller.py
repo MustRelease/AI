@@ -58,7 +58,7 @@ class Controller:
         encode_query = urllib.parse.quote(query)
         url = base_url + "memory/get/"
         url += (encode_query + "/")
-        url += (userId + "/20")
+        url += (userId + "/30")
         r = requests.get(url)
         return r.json()
 
