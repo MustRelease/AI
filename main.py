@@ -71,9 +71,10 @@ def response(data : Memory):
     message += retriever.retrieve_buffer(data.userId)
     message += "\n<현재 상황>\n"
     message += data.content
-    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까?"
+    message += "\nInstruct : 그래서 너는 기억과 이전 대화내용을 참고하여 현재 상황에서 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다."
     message += ("\n" if data.count<3 else " 이제 대화를 마무리하는 말을 한다.\n")
     r = generater.generate(message)
+    r = r.replace("\"", "")
     # 반환값 생성
     dic = {
         "content" : r,
