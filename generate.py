@@ -20,7 +20,7 @@ class Generater:
         )
 
 	def set_instructions(self, instruction):
-		my_updated_assistant = client.beta.assistants.update(
+		my_updated_assistant = self.client.beta.assistants.update(
   			self.assistant_id,
   			instructions=instruction
 		)
