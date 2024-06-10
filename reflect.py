@@ -66,19 +66,20 @@ Statements about 나와 지성\n
 1. 나는 '총, 수류탄, 칼이 있는데 어떤 걸 쓸래?'라고 말했다.
 2. 지성은 '나는 주로 총을 써. 다른 건 별로 안 쓰지.'라고 말했다.
 3. 나는 아, 좋아! 총을 잘 쓴다니 다행이네!라고 말했다.
-What high-level insights can you infer from the above statements about 지성 in Korean? (example format: insight (because of [1, 5, 3]))
+What high-level insights can you infer from the above statements about 나와 지성 in Korean? (example format: insight (because of [1, 5, 3]))
 
 <예시 답>
 1. 지성은 무기를 사용할 줄 안다. (because of [2, 3])
-2. 지성은 총기를 선호한다. (because of [2])
-3. 지성은 전투 상황에 익숙하다. (because of [0, 1, 2])
+2. 나는 지성에게 여러 가지 무기 중에서 선택하게 했다. (because of [1])
+3. 지성은 총기를 선호한다. (because of [2])
+4. 지성은 전투 상황에 익숙하다. (because of [0, 1, 2])
 
 """
 		input += "Statements about 나와 지성\n"
 		response = controller.load_buffer(userId)
 		for i, data in enumerate(response):
 			input = input + str(i) + ". " + data["observation"] + "\n"
-		input += "What high-level insights can you infer from the above statements about 지성 in Korean? (example format: insight (because of [1, 5, 3]))"
+		input += "What high-level insights can you infer from the above statements about 나와 지성 in Korean? (example format: insight (because of [1, 5, 3]))"
 		print(input)
 		completion = self.client.chat.completions.create(
 		  model="gpt-4o",
