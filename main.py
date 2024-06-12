@@ -77,13 +77,12 @@ def response(data : Memory):
     print("Last Message", message.split(sep="\n")[-1])
     message += "\n"
     message += data.instruction if data.instruction is not None else "Instruct : 너는 기억을 참고해서 다음에 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다. 여러 문장으로 대답을 해도 문장과 문장은 서로 연관이 있다. 대답은 이전대화 내용을 참고해서 맥락에 어긋나지 않도록 한다."
-    message += ("\n" if data.count<3 else " 이제 대화를 마무리하는 말을 한다.\n")
     r = generater.generate(message, UserInfo[data.userId])
     r = r.replace("\"", "")
     # 반환값 생성
     dic = {
         "content" : r,
-        "regenerate" : True if data.count<3 else False
+        "regenerate" : True
     }
     return dic
 
