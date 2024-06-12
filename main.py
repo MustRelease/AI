@@ -71,8 +71,8 @@ def response(data : Memory):
     message += retriever.retrieve_memory_system(data)
     message += "<이전 대화내용>\n"
     message += retriever.retrieve_buffer(data.userId)
-    message = message + data.content + "\n"
-    message += data.instruction if data.instruction is not None else "Instruct : 너는 기억을 참고하고 이전 대화내용에 이어서 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다. 이전 대화내용에서 말한 내용을 똑같이 말하지 않는다. 한 대답에서 맥락에 어긋나지 않도록 한다."
+    message = "\n"
+    message += data.instruction if data.instruction is not None else "Instruct : 너는 기억을 참고해서 다음에 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다. 이전 대화내용에서 말한 내용을 똑같이 말하지 않는다. 한 대답에서 맥락에 어긋나지 않도록 한다."
     message += ("\n" if data.count<3 else " 이제 대화를 마무리하는 말을 한다.\n")
     r = generater.generate(message)
     r = r.replace("\"", "")
