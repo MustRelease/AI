@@ -27,7 +27,7 @@ class Generater:
 		print(my_updated_assistant)
 
 	def set_assistant(self, character):
-		my_assistant = client.beta.assistants.create(
+		my_assistant = self.client.beta.assistants.create(
 		    instructions=character,
 		    name="연아",
 		    model="gpt-4o-2024-05-13",
