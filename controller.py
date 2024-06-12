@@ -1,7 +1,7 @@
 import requests, json
 import urllib.parse
 
-base_url = "http://ec2-3-25-229-168.ap-southeast-2.compute.amazonaws.com:8000/"
+base_url = "http://sw.uos.ac.kr:8000/"
 
 class Controller:
     def init_db(self, userId):

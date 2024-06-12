@@ -71,15 +71,14 @@ def response(data : Memory):
     message += "<이전 대화내용>\n"
     message += retriever.retrieve_buffer(data.userId)
     message += data.content
-    message += "\nInstruct : 너는 기억을 참고하고 이전 대화내용에 이어서 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다."
-    message += ("\n" if data.count<2 else " 가능하면 질문보다는 나의 이야기를 많이 한다.")
-    message += ("\n" if data.count<4 else " 이제 대화를 마무리하는 말을 한다.\n")
+    message += "\nInstruct : 너는 기억을 참고하고 이전 대화내용에 이어서 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다. 이전 대화내용에서 말한 내용을 똑같이 말하지 않는다."
+    message += ("\n" if data.count<3 else " 이제 대화를 마무리하는 말을 한다.\n")
     r = generater.generate(message)
     r = r.replace("\"", "")
     # 반환값 생성
     dic = {
         "content" : r,
-        "regenerate" : True if data.count<4 else False
+        "regenerate" : True if data.count<3 else False
     }
     return dic
 
