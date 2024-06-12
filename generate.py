@@ -42,6 +42,11 @@ class Generater:
 			for text in stream.text_deltas:
 				print(text, end="")
 				response += text
+		message = self.client.beta.threads.messages.create(
+  			thread_id=thread.id,
+  			role="user",
+  			content="명령 : 방금 너가 한 말에서 문맥에 맞지 않은 말이 있다면 고쳐서 형식은 그대로 다시 출력한다."
+		)
 		return response
 
 
