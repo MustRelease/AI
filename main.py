@@ -69,11 +69,11 @@ def save(data : List[Memory]):
 @app.post('/response/generate')
 def response(data : Memory):
     # 기억 생성
+    retriever = Retriever()
     buffer_memory = retriever.retrieve_buffer(data.userId)
     print("Last Message", buffer_memory[-2])
     data.content = buffer_memory[-2] + " " + data.content
     message = ""
-    retriever = Retriever()
     message += retriever.retrieve_memory_system(data)
     message += "<이전 대화내용>\n"
     message += buffer_memory
