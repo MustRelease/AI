@@ -69,12 +69,14 @@ def save(data : List[Memory]):
 @app.post('/response/generate')
 def response(data : Memory):
     # 기억 생성
+    buffer_memory = retriever.retrieve_buffer(data.userId)
+    print("Last Message", buffer_memory[-2])
+    data.content = buffer_memory[-2] + " " + data.content
     message = ""
     retriever = Retriever()
     message += retriever.retrieve_memory_system(data)
     message += "<이전 대화내용>\n"
-    message += retriever.retrieve_buffer(data.userId)
-    print("Last Message", message.split(sep="\n")[-1])
+    message += buffer_memory
     message += "\n"
     message += data.instruction if data.instruction is not None else "Instruct : 너는 기억을 참고해서 다음에 지성에게 뭐라고 해야할까? 여러 문장으로 답변할 경우 개행 문자로 구분한다. 여러 문장으로 대답을 해도 문장과 문장은 서로 연관이 있다. 대답은 이전대화 내용을 참고해서 맥락에 어긋나지 않도록 한다."
     r = generater.generate(message, UserInfo[data.userId])
