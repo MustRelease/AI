@@ -26,7 +26,15 @@ class Generater:
 		)
 		print(my_updated_assistant)
 
-	def generate(self, query):
+	def set_assistant(self, character):
+		my_assistant = client.beta.assistants.create(
+		    instructions=character,
+		    name="연아",
+		    model="gpt-4o-2024-05-13",
+		)
+		return my_assistant.id
+
+	def generate(self, query, assis_id):
 		print(query)
 		thread = self.client.beta.threads.create()
 		message = self.client.beta.threads.messages.create(
@@ -37,7 +45,7 @@ class Generater:
 		response = ""
 		with self.client.beta.threads.runs.stream(
 			thread_id=thread.id,
-			assistant_id=self.assistant_id
+			assistant_id=assis_id
 		) as stream:
 			for text in stream.text_deltas:
 				print(text, end="")
